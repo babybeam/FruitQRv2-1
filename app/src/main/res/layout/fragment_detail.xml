@@ -69,6 +69,7 @@
 
     <!--Name Shop-->
     <TextView
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/txtShop"
         android:textStyle="bold"
         android:text="Shop"
@@ -78,6 +79,7 @@
 
     <!--Address-->
     <TextView
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/txtaddress"
         android:textStyle="bold"
         android:text="Address"
@@ -86,6 +88,7 @@
         android:layout_height="wrap_content" />
     <!--phone-->
         <TextView
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/txtphone"
             android:textStyle="bold"
             android:text="Phone"
