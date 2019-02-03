@@ -14,29 +14,73 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ServiceActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle; //ทำการเชื่อม  toolbar กับ ActionBarDrawerToggle
+    private String idString, nameUserString, typeUserString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
 
-//        Create Toobar
+        getUser();
+
+    } //Main Method
+
+    private void createToobar() {
         Toolbar toolbar = findViewById(R.id.toobarService);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setSubtitle(nameUserString + " " + showType(typeUserString));
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.ic_action_hamberger); //ทำแถบเมณูเป็น Hamberger
 
 //        Create Hamberger Icon
-            drawerLayout = findViewById(R.id.layoutDrawerLayout);
-            actionBarDrawerToggle = new ActionBarDrawerToggle(ServiceActivity.this, drawerLayout, R.string.open,R.string.close); //ต้องใส่ค่า open และ close ใน string
+        drawerLayout = findViewById(R.id.layoutDrawerLayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(ServiceActivity.this, drawerLayout, R.string.open,R.string.close); //ต้องใส่ค่า open และ close ใน string
+    }
 
+    private String showType(String typeUserString) {
 
-    } //Main Method
+        String[] strings = {"","Admin","Farmer","Product","Customer"};
+        try {
+
+            int index = Integer.parseInt(typeUserString.trim());
+            return  strings[index];
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+
+    }
+
+    private void getUser() {
+        idString = getIntent().getStringExtra("id");
+        try {
+
+            Myconstant myconstant = new Myconstant();
+            GetDataWhereOneColumn getDataWhereOneColumn = new GetDataWhereOneColumn(ServiceActivity.this);
+            getDataWhereOneColumn.execute("id", idString, myconstant.getUrlGetUserWhereId());
+            String json = getDataWhereOneColumn.get();
+
+            JSONArray jsonArray = new JSONArray(json);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+            nameUserString = jsonObject.getString("Name");
+            typeUserString = jsonObject.getString("TypeUser");
+
+            createToobar();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,7 +93,7 @@ public class ServiceActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.itemQR){
-        startActivity(new Intent(ServiceActivity.this, QRActivity.class));
+            startActivity(new Intent(ServiceActivity.this, QRActivity.class));
 
         }
 
