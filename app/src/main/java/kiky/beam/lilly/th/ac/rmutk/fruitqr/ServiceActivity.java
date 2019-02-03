@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,7 +31,18 @@ public class ServiceActivity extends AppCompatActivity {
 
         getUser();
 
+
     } //Main Method
+    private void showList(){
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.contentServiceFragment,ShowListFragment.showListInstance(Integer.parseInt(typeUserString.trim())))
+                .commit();
+
+
+
+    }
 
     private void createToobar() {
         Toolbar toolbar = findViewById(R.id.toobarService);
@@ -76,6 +88,7 @@ public class ServiceActivity extends AppCompatActivity {
             typeUserString = jsonObject.getString("TypeUser");
 
             createToobar();
+            showList();
 
         } catch (Exception e) {
             e.printStackTrace();
